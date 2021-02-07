@@ -33,6 +33,18 @@ $ docker tag ivy-bot-zulip:latest <account_id>.dkr.ecr.<region>.amazonaws.com/iv
 $ docker push <account_id>.dkr.ecr.<region>.amazonaws.com/ivy-bot-zulip:latest
 ```
 
+#### Terraform
+
+You can deploy me to AWS Lambda like a hacker man using terraform. Your best allies: init, plan, apply
+```console
+$ terraform init
+$ terraform plan
+$ terraform apply
+```
+
+You can declare the env. variables using the `TF_VAR_` prefix, e.g., `export TF_VAR_GITHUB_TOKEN=<token>`
+
+#### Test
 To [test locally the image](https://docs.aws.amazon.com/lambda/latest/dg/images-test.html) run
 ```console
 $ docker run -p 9000:8080 ivy-bot-zulip:latest 
