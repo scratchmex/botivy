@@ -5,7 +5,7 @@ Description=ivy bot
 After=network.target
 Restart=always
 RestartSec=1
-WorkingDirectory=/opt/ivybot
+WorkingDirectory=/opt/botivy
 ExecStart=/opt/poetry/bin/poetry run python -m ivy_bot
 
 [Install]
