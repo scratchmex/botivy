@@ -1,7 +1,10 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
+import requests
+
 from fastapi import Request
+from decouple import config
 from pydantic import BaseModel
 
 from .actions import DeployInfo
@@ -48,19 +51,20 @@ class SlackWebhookRequest(BaseModel):
     response_url: str
 
 
+slack_webhook = config("SLACK_WEBHOOK")
 class Slack(Parser):
     async def get_action(self, request: Request):
         req = SlackWebhookRequest(**(await request.form()))
 
         action = req.command.lstrip("/")
         args = req.text.split(" ")
-        
+    
         return action, args
 
     def reply(self, info: DeployInfo):
         msg = f"Deploying `{info.repo_uri}` @ `{info.ref}` to *{info.env}* <https://github.com/{info.repo_uri}/deployments|see here>"
 
-        return {
+        requests.post(slack_webhook, json={
             "blocks": [
                 {
                     "type": "section",
@@ -70,4 +74,7 @@ class Slack(Parser):
                     }
                 },
             ]
-        }
+        })
+
+        return {"text": "ack"}
+        
