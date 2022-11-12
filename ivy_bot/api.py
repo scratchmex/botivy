@@ -1,23 +1,16 @@
-from pprint import pprint as print
+from pprint import pprint
+
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
 
 from . import parser
 from .bot import Bot
 
-class WebhookRequest(BaseModel):
-    bot_email: str
-    data: str
-    message: dict
-    token: str
-    trigger: str
 
 app = FastAPI()
 
 bot = Bot(
-    parser=parser.Zulip,
+    parser=parser.Slack(),
 )
-
 
 @app.get("/")
 async def get_root():
@@ -25,7 +18,7 @@ async def get_root():
     
 
 @app.post("/")
-async def post_root(request: WebhookRequest):
-    print(request.json())
+async def post_root(request: Request):
+    pprint(await request.body())
 
-    return bot.dispatch(request.data)
+    return await bot.dispatch(request)

@@ -1,17 +1,19 @@
 from decouple import config
 from traceback import format_exc
 
+from fastapi import Request
+
 from . import actions
 from .parser import Parser
 
 
 class Bot:
     def __init__(self, *, parser: Parser, **kwargs):
-        self.parser = parser()
+        self.parser = parser
         self.conf = kwargs
 
-    def dispatch(self, msg: str):
-        action, args = self.parser.get_action(msg)
+    async def dispatch(self, request: Request):
+        action, args = await self.parser.get_action(request)
 
         action_callback = getattr(self, action)
 
@@ -22,7 +24,7 @@ class Bot:
         try:
             msg = action_callback(args)
         except Exception:
-            msg = f"Failure! \n\n```text\n{format_exc()}```"
+            msg = f"Failure! \n\n```\n{format_exc()}```"
 
         return self.parser.reply(msg)
 
@@ -39,7 +41,7 @@ class Bot:
             repo, ref = args
         else:
             if not len(args) == 1:
-                return "I should only receive the <ref> as argument without spaces"
+                return "I should only receive the `<ref>` as argument without spaces"
             
             ref, = args
         
