@@ -62,9 +62,10 @@ class Slack(Parser):
         return action, args
 
     def reply(self, info: DeployInfo | None, exp_msg: str | None):
-        if exp_msg is None:
+        if exp_msg:
             msg = exp_msg
         else:
+            assert info is not None
             msg = f"Deploying `{info.repo_uri}` @ `{info.ref}` <https://github.com/{info.repo_uri}/deployments|see here>"
 
         requests.post(slack_webhook, json={
