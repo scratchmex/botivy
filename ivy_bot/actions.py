@@ -19,6 +19,7 @@ def deploy(repo_uri: str, ref: str) -> DeployInfo:
         ref=ref,
         description=f"Deploying {ref} via Ivy bot",
         auto_merge=False,  # allow to deploy past ref
+        required_contexts=[],  # disable success commit status to run
     )
   
     return DeployInfo(
