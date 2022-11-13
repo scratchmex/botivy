@@ -62,7 +62,7 @@ class Slack(Parser):
         return action, args
 
     def reply(self, info: DeployInfo):
-        msg = f"Deploying `{info.repo_uri}` @ `{info.ref}` to *{info.env}* <https://github.com/{info.repo_uri}/deployments|see here>"
+        msg = f"Deploying `{info.repo_uri}` @ `{info.ref}` <https://github.com/{info.repo_uri}/deployments|see here>"
 
         requests.post(slack_webhook, json={
             "blocks": [

@@ -10,21 +10,18 @@ gh = Github(gh_token)
 class DeployInfo(BaseModel):
     repo_uri: str
     ref: str
-    env: str
 
-def deploy(repo_uri: str, ref: str, env="production") -> DeployInfo:
+def deploy(repo_uri: str, ref: str) -> DeployInfo:
     repo = gh.get_repo(repo_uri)
 
     # https://docs.github.com/en/rest/reference/repos#create-a-deployment
     repo.create_deployment(
         ref=ref,
-        environment=env,
-        description=f"Deploying {ref} to {env} via Ivy bot",
+        description=f"Deploying {ref} via Ivy bot",
         auto_merge=False,  # allow to deploy past ref
     )
   
     return DeployInfo(
         repo_uri=repo_uri,
         ref=ref,
-        env=env,
     )
