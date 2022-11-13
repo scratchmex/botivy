@@ -22,11 +22,13 @@ class Bot:
 
             return
         try:
-            msg = action_callback(args)
+            info = action_callback(args)
+            exp_msg = None
         except Exception:
-            msg = f"Failure! \n\n```\n{format_exc()}```"
+            info = None
+            exp_msg = f"Failure! \n\n```\n{format_exc()}```"
 
-        return self.parser.reply(msg)
+        return self.parser.reply(info=info, exception=exp_msg)
 
     def deploy(self, args: list):
         """
