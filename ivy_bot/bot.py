@@ -28,7 +28,7 @@ class Bot:
             info = None
             exp_msg = f"Failure! \n\n```\n{format_exc()}```"
 
-        return self.parser.reply(info=info, exception=exp_msg)
+        return self.parser.reply(info=info, exp_msg=exp_msg)
 
     def deploy(self, args: list):
         """
